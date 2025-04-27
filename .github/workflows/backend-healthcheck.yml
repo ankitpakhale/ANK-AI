@@ -1,50 +1,58 @@
-name: Backend Healthcheck
+name: Backend Healthcheck with Docker
 
 on:
   push:
     branches:
-      - main  # or specify other branches you want this to run on
+      - main
   schedule:
-    - cron: '0 0 * * *'  # every day at 00:00 UTC
-  workflow_dispatch:      # allow manual trigger too
-
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   backend-healthcheck:
     runs-on: ubuntu-latest
 
-    services:
-      backend:
-        image: python:3.9
-        options: --health-cmd="curl --fail http://localhost:5001/healthcheck || exit 1" --health-interval=30s --health-timeout=30s --health-retries=3
-        ports:
-          - 5001:5001
-        volumes:
-          - .:/app
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python environment
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+      - name: Check Docker version
+        run: docker version
 
-      - name: Run the Flask backend
+      - name: Clean up any previous containers
         run: |
-          nohup flask run --host=0.0.0.0 &
+          docker rm -f backend_container || true
+          docker network rm backend_network || true
 
-      - name: Call backend healthcheck endpoint
+      - name: Create Docker network
+        run: docker network create backend_network
+
+      - name: Build backend Docker image
+        run: docker build -t backend .
+
+      - name: Start backend container
         run: |
-          RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:5001/healthcheck)
-          if [ $RESPONSE -ne 200 ]; then
-            echo "Backend healthcheck failed with status code $RESPONSE"
-            exit 1
-          else
-            echo "Backend is healthy ✅"
-          fi
+          docker run -d --name backend_container --network backend_network -p 5001:5001 backend
+
+      - name: Wait for backend to be ready
+        run: |
+          for i in {1..10}; do
+            RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:5001/healthcheck)
+            if [ "$RESPONSE" -eq 200 ]; then
+              echo "✅ Backend is healthy"
+              exit 0
+            fi
+            echo "Waiting for backend... ($i/10)"
+            sleep 5
+          done
+          echo "❌ Backend did not become healthy in time."
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker rm -f backend_container
+          docker network rm backend_network
