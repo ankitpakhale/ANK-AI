@@ -1,0 +1,86 @@
+# ---- React JS ----
+# dependencies
+**/node_modules
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# production build
+**/build
+**/dist
+
+# misc
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+**/.DS_Store
+
+# editor
+.vscode/
+.idea/
+
+# ---- Python (Flask Backend) ----
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+*.egg
+*.egg-info/
+dist/
+build/
+develop-eggs/
+.eggs/
+
+# Flask-related
+instance/
+*.db
+.env
+.venv/
+venv/
+ENV/
+env/
+*.sqlite3
+
+# PyInstaller
+*.manifest
+*.spec
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# pytest
+.pytest_cache/
+
+# logs
+*.log
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
+
+# Docker (optional)
+**/docker-compose.override.yml
+**/docker-compose*.log
+
+# ---- General ----
+*.swp
+*.bak
+*.tmp
