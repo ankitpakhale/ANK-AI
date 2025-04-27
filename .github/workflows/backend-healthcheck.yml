@@ -48,6 +48,7 @@ jobs:
             echo "Waiting for backend... ($i/10)"
             sleep 5
           done
+
           echo "❌ Backend did not become healthy in time."
           exit 1
 
