@@ -40,7 +40,7 @@ jobs:
       - name: Wait for backend to be ready
         run: |
           for i in {1..10}; do
-            RESPONSE=$(docker exec backend_container curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:5001/healthcheck)
+            RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000/healthcheck)
             if [ "$RESPONSE" -eq 200 ]; then
               echo "✅ Backend is healthy"
               exit 0

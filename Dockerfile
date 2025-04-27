@@ -1,20 +1,24 @@
 # Use the official Python image as a base
 FROM python:3.9-slim
 
-# Set the working directory in the container
+# Install curl
+RUN apt-get update && apt-get install -y curl
+
+# Set the working directory
 WORKDIR /app
 
-# Copy the requirements.txt file into the container
+# Copy requirements and install
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the backend application code
+# Copy backend code
 COPY . .
 
-# Expose the backend port (e.g., 5000 for Flask or 8000 for FastAPI)
+# Expose correct backend port
 EXPOSE 8000
 
-# Command to run the backend application
+# Optional: Docker native healthcheck inside the container
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl --fail http://localhost:8000/healthcheck || exit 1
+
+# Start backend
 CMD ["python", "main.py"]
