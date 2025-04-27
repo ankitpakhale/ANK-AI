@@ -48,6 +48,7 @@ function Chat({ agentType, initialMessage, agentInitials, directQuestion }) {
         );
 
         if (response.data && response.data.response) {
+          console.info(">>>>>>>>>>>>>>>>>>>>> response.data.response");
           setMessages((prev) => [
             ...prev,
             {
