@@ -1,0 +1,50 @@
+name: Backend Healthcheck
+
+on:
+  push:
+    branches:
+      - main  # or specify other branches you want this to run on
+  schedule:
+    - cron: '0 0 * * *'  # every day at 00:00 UTC
+  workflow_dispatch:      # allow manual trigger too
+
+
+jobs:
+  backend-healthcheck:
+    runs-on: ubuntu-latest
+
+    services:
+      backend:
+        image: python:3.9
+        options: --health-cmd="curl --fail http://localhost:5001/healthcheck || exit 1" --health-interval=30s --health-timeout=30s --health-retries=3
+        ports:
+          - 5001:5001
+        volumes:
+          - .:/app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run the Flask backend
+        run: |
+          nohup flask run --host=0.0.0.0 &
+
+      - name: Call backend healthcheck endpoint
+        run: |
+          RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:5001/healthcheck)
+          if [ $RESPONSE -ne 200 ]; then
+            echo "Backend healthcheck failed with status code $RESPONSE"
+            exit 1
+          else
+            echo "Backend is healthy ✅"
+          fi

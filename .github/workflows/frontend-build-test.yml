@@ -1,0 +1,37 @@
+name: Frontend Build & Lint Test
+
+on:
+  push:
+    branches:
+      - main  # or specify other branches you want this to run on
+  schedule:
+    - cron: '0 1 * * *'  # every day at 01:00 UTC
+  workflow_dispatch:      # allow manual trigger too
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run build
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Run lint
+        run: |
+          cd frontend
+          npm run lint

@@ -296,6 +296,10 @@ def research_agent_endpoint():
     return jsonify({'response': response})
 
 
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    return 'pong', 200
+
 if __name__ == '__main__':
 
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
