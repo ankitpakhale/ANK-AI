@@ -22,7 +22,14 @@ jobs:
       - name: Start backend container
         run: |
           docker rm -f backend_container || true
-          docker run -d --name backend_container -p 8000:8000 backend
+          docker run -d \
+            --name backend_container \
+            -p 8000:8000 \
+            backend
+
+      - name: Wait for Flask to boot up
+        # give app time to start before the single curl
+        run: sleep 10
 
       - name: Single healthcheck
         run: |
