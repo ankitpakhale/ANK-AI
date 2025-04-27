@@ -29,18 +29,10 @@ jobs:
 
       - name: Wait for Flask to boot up
         # give app time to start before the single curl
-        run: sleep 10
+        run: sleep 5
 
-      - name: Single healthcheck
+      - name: Healthcheck
         run: |
-          # HTTP_CODE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000/healthcheck)
-          # if [ "$HTTP_CODE" -ne 200 ]; then
-          #   echo "❌ Healthcheck failed with status $HTTP_CODE"
-          #   docker logs backend_container
-          #   exit 1
-          # fi
-          # echo "✅ Backend is healthy"
-
           for attempt in {1..10}; do
             RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000/healthcheck)
             if [ "$RESPONSE" -eq 200 ]; then
