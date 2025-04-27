@@ -22,7 +22,7 @@ jobs:
       - name: Check Docker version
         run: docker version
 
-      - name: Clean up any previous containers
+      - name: Clean up previous containers
         run: |
           docker rm -f backend_container || true
           docker network rm backend_network || true
@@ -35,12 +35,12 @@ jobs:
 
       - name: Start backend container
         run: |
-          docker run -d --name backend_container --network backend_network -p 5001:5001 backend
+          docker run -d --name backend_container --network backend_network backend
 
       - name: Wait for backend to be ready
         run: |
           for i in {1..10}; do
-            RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:5001/healthcheck)
+            RESPONSE=$(docker exec backend_container curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:5001/healthcheck)
             if [ "$RESPONSE" -eq 200 ]; then
               echo "✅ Backend is healthy"
               exit 0
