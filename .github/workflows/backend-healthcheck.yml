@@ -51,7 +51,6 @@ jobs:
 
           echo "❌ Backend did not become healthy in time."
           exit 1
-
       - name: Cleanup
         if: always()
         run: |
