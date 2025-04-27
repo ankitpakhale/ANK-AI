@@ -114,7 +114,7 @@ python main.py
 ```
 
 Backend will run on:  
-`http://localhost:5001`
+`http://localhost:8000`
 
 ---
 
@@ -148,31 +148,31 @@ Frontend will run on:
 Welcome:
 
 ```bash
-curl -X POST http://localhost:5001/api/welcome -H "Content-Type: application/json" -d '{"prompt": "Hi"}'
+curl -X POST http://localhost:8000/api/welcome -H "Content-Type: application/json" -d '{"prompt": "Hi"}'
 ```
 
 Project Inquiry:
 
 ```bash
-curl -X POST http://localhost:5001/api/project -H "Content-Type: application/json" -d '{"prompt": "Tell me about your latest projects"}'
+curl -X POST http://localhost:8000/api/project -H "Content-Type: application/json" -d '{"prompt": "Tell me about your latest projects"}'
 ```
 
 Career Inquiry:
 
 ```bash
-curl -X POST http://localhost:5001/api/career -H "Content-Type: application/json" -d '{"prompt": "What skills should I learn for a full-stack role?"}'
+curl -X POST http://localhost:8000/api/career -H "Content-Type: application/json" -d '{"prompt": "What skills should I learn for a full-stack role?"}'
 ```
 
 Client Services:
 
 ```bash
-curl -X POST http://localhost:5001/api/client -H "Content-Type: application/json" -d '{"prompt": "How do you work with clients?"}'
+curl -X POST http://localhost:8000/api/client -H "Content-Type: application/json" -d '{"prompt": "How do you work with clients?"}'
 ```
 
 Research:
 
 ```bash
-curl -X POST http://localhost:5001/api/research -H "Content-Type: application/json" -d '{"prompt": "Compare React and Vue"}'
+curl -X POST http://localhost:8000/api/research -H "Content-Type: application/json" -d '{"prompt": "Compare React and Vue"}'
 ```
 
 ---

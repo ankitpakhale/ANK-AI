@@ -8,7 +8,7 @@ function Chat({ agentType, initialMessage, agentInitials, directQuestion }) {
   const messagesEndRef = useRef(null);
   const [processedQuestions, setProcessedQuestions] = useState([]);
 
-  const API_BASE_URL = "http://127.0.0.1:5001";
+  const API_BASE_URL = "http://127.0.0.1:8000";
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,7 +62,7 @@ function Chat({ agentType, initialMessage, agentInitials, directQuestion }) {
           ...prev,
           {
             content:
-              "Sorry, there was an error connecting to the AI agent. Please make sure the Flask server is running at http://127.0.0.1:5001/",
+              "Sorry, there was an error connecting to the AI agent. Please make sure the Flask server is running at http://127.0.0.1:8000/",
             isUser: false,
           },
         ]);
