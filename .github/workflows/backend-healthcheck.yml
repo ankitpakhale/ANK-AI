@@ -39,13 +39,13 @@ jobs:
 
       - name: Wait for backend to be ready
         run: |
-          for i in {1..10}; do
+          for attempt in {1..10}; do
             RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000/healthcheck)
             if [ "$RESPONSE" -eq 200 ]; then
               echo "✅ Backend is healthy"
               exit 0
             fi
-            echo "Waiting for backend... ($i/10)"
+            echo "Waiting for backend... ($attempt/10)"
             sleep 5
           done
 
