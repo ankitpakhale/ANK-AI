@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # daily at midnight UTC
   workflow_dispatch:
 
 jobs:
@@ -22,20 +22,19 @@ jobs:
       - name: Check Docker version
         run: docker version
 
-      - name: Clean up previous containers
+      - name: Clean up previous container
         run: |
           docker rm -f backend_container || true
-          docker network rm backend_network || true
-
-      - name: Create Docker network
-        run: docker network create backend_network
 
       - name: Build backend Docker image
         run: docker build -t backend .
 
       - name: Start backend container
         run: |
-          docker run -d --name backend_container --network backend_network backend
+          docker run -d \
+            --name backend_container \
+            -p 8000:8000 \
+            backend
 
       - name: Wait for backend to be ready
         run: |
@@ -51,8 +50,7 @@ jobs:
 
           echo "❌ Backend did not become healthy in time."
           exit 1
+
       - name: Cleanup
         if: always()
-        run: |
-          docker rm -f backend_container
-          docker network rm backend_network
+        run: docker rm -f backend_container
