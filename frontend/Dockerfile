@@ -15,9 +15,6 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the frontend code
 COPY frontend/ .
 
-# Polyfill crypto if needed (it might already be installed)
-RUN npm install crypto-browserify
-
 # Build the frontend application with Vite
 RUN npm run build
 
